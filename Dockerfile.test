@@ -1,0 +1,18 @@
+### Dockerfile for testing ###
+# used node-version
+ARG NODE_VERSION=14-stretch
+
+FROM node:${NODE_VERSION}
+
+WORKDIR "/usr/src/app"
+
+ENV NODE_ENV=testing
+
+COPY package*.json  ./
+COPY .eslintrc.json ./
+COPY tsconfig*.json ./
+COPY jest.config.js ./
+
+RUN npm ci --silent
+
+CMD ["npm", "run", "test:watch"]

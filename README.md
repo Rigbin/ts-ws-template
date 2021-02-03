@@ -50,10 +50,12 @@ All you need is a docker compose environment. See [here](https://docs.docker.com
 
 Docker-compose will build and start a new dev-instance, were the local [src](./src) folder will be mapped. So you can develop without a local node environment.
 
+As separate service, a test-instance will run, which will watch the tests inside [test](./test) and run them automatically on any changes.
+
 #### Downsides
 Because only `src/` will be mapped into the container, you need to re-run the service every time you need to make some changes in the [package.json](package.json) (e.g. add additional packages).
 
-> When making some changes you should also run `docker-compose build` before up, to re-build the container image!
+> When making some changes you should also run `docker-compose build` before up, to re-build the container image! Or you start the service with `docker-compose up --build`!
 
 
 ## Prerequisites
@@ -94,3 +96,4 @@ Run tests with coverage (you can find the coverage report in [test/coverage](./t
 npm run test:coverage
 ```
 
+When you use [docker-compose](#docker-dev) you will also have a separate service running the tests in watch mode.
