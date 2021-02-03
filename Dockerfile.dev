@@ -1,0 +1,21 @@
+### Dockerfile for development ###
+# used node-version
+ARG NODE_VERSION=14-stretch
+
+FROM node:${NODE_VERSION}
+
+WORKDIR "/usr/src/app"
+
+ENV NODE_ENV=development
+ENV SERVER_PORT=8080
+
+COPY package*.json  ./
+COPY .eslintrc.json ./
+COPY nodemon.json   ./
+COPY tsconfig*.json ./
+
+RUN npm ci --silent
+
+EXPOSE ${SERVER_PORT}
+
+CMD ["npm", "run", "start:dev"]

@@ -8,7 +8,7 @@ created for educational purpose. [FH JOANNEUM IMS](https://www.fh-joanneum.at/im
 ## About
 Here you can find a base template to create web/micro services with [Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/), using [TypeScript](https://www.typescriptlang.org/).
 
-You can run it locally, as long as you have installed Node.js, or using Docker. (`TODO...`).
+You can run it locally, as long as you have installed Node.js, or using Docker (see [docker-dev](#docker-dev) section).
 
 This project provides a [Dockerfile](Dockerfile) to create a container running the service. This Dockerfile is [multi-staged](https://docs.docker.com/develop/develop-images/multistage-build/), to first build/transpile TypeScript to JavaScript. Find more information in the [Docker](#docker) section.
 
@@ -35,6 +35,26 @@ Stop container
 ```console
 docker container stop ts-service
 ```
+
+### Docker-Dev
+
+When you don't want to install/configure Node.js locally, you can run a full development service inside Docker. Therefore, I provide the [docker-compose](docker-compose.yml) and [Dockerfile.dev](Dockerfile.dev).
+
+All you need is a docker compose environment. See [here](https://docs.docker.com/compose/install/).
+
+1. Start dev server
+  ```console
+  docker-compose up
+  ```
+  > **HINT**: Use the option `-d` to run docker-compose detached in the background.
+
+Docker-compose will build and start a new dev-instance, were the local [src](./src) folder will be mapped. So you can develop without a local node environment.
+
+#### Downsides
+Because only `src/` will be mapped into the container, you need to re-run the service every time you need to make some changes in the [package.json](package.json) (e.g. add additional packages).
+
+> When making some changes you should also run `docker-compose build` before up, to re-build the container image!
+
 
 ## Prerequisites
 When developing locally, you need [Node.js](https://nodejs.org/en/), I recommend the current (02.2021) [LTS 14.x](https://nodejs.org/dist/latest-v14.x/).
