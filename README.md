@@ -75,6 +75,22 @@ npm run start:dev
 
 To build the project, run `npm run build` or take a look into the [Docker](#docker) section.
 
-## Useful links
+## Testing
 
-<!-- TODO -->
+I'm using [Jest](https://jestjs.io/) for testing, you can find some example tests inside of [test](./test). With the help of [supertest](https://www.npmjs.com/package/supertest) we also can do some [End2End-Testing](./test/e2e) without the need of a separate running node-server.
+
+Run tests locally
+```console
+npm test
+```
+
+Run tests in watching mode
+```console
+npm run test:watch
+```
+
+Run tests with coverage (you can find the coverage report in [test/coverage](./test/coverage)).
+```console
+npm run test:coverage
+```
+
