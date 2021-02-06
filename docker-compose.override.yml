@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    image: ts-service-test
+    container_name: ts-service-test
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=testing
+    volumes:
+      - ./src:/usr/src/app/src
+      - ./test:/usr/src/app/test

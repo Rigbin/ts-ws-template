@@ -38,9 +38,77 @@ Stop container
 docker container stop ts-service
 ```
 
+You find also a compose-file in the project for a productive service: [docker-compose.prod.yml](docker-compose.prod.yml). To start the production environment, run the following command in the console
+
+```console
+docker-compose -f docker-compose.prod.yml up
+```
+
+#### Multi-Stage
+Because we need to transpile TypeScript to JavaScript before we can run the service (without [`ts-node`](https://github.com/TypeStrong/ts-node)), we use the [multi-stage](https://docs.docker.com/develop/develop-images/multistage-build/) functionality of Docker.
+
+For this project, we need two stages.
+
+```dockerfile
+ARG NODE_VERSION=14-stretch
+...
+```
+at the beginning of the Dockerfile, we define an variable `NODE_VERSION` which will be used for the base container.
+
+```dockerfile
+...
+
+FROM node:${NODE_VERSION} AS builder
+
+WORKDIR "/usr/src/app"
+
+ENV NODE_OPTIONS="--max-old-space-size=1024"
+
+COPY package*.json  ./
+COPY tsconfig*.json ./
+COPY .eslintrc.json ./
+COPY ./src          ./src
+RUN npm ci --silent && npm run build
+
+...
+```
+In stage one, we use a full `node:` container as base. We add a name to it (`AS builder`), that we need later to reference in stage two.
+
+The `NODE_OPTIONS` is needed to avoid errors while build, because the memory requirements at this stage can be higher than available by default.
+
+We copy the needed files into the container and run `npm ci` to download needed node packages (including `devDependencies`) and run the build.
+
+Stage one is finished at this point. We could find the `dist` directory in this container, which we will copy later into the actual Container.
+
+```Dockerfile
+...
+FROM node:${NODE_VERSION}-slim
+
+WORKDIR "/app"
+
+ENV NODE_ENV=production
+ENV SERVER_PORT=8080
+
+COPY package*.json  ./
+RUN npm ci --silent --only=${NODE_ENV}
+
+## copy compiled files from stage 1
+COPY --from=builder /usr/src/app/dist ./dist
+
+CMD ["node", "/app/dist/server.js"]
+EXPOSE ${SERVER_PORT
+```
+
+In stage two, we use the `node:...-slim` container to keep the container as small as possible. We set the `NODE_ENV` environment variable to `production` and the Port, that will be used by the container.
+
+We only copy `package*.json` files, because we only install production `dependencies`.
+
+Now, we copy the `dist/` directory (transpiled JavaScript sources) from the first stage (`builder`) into the actual Container and define the `CMD` to run the service.
+
+
 ### Docker-Dev
 
-When you don't want to install/configure Node.js locally, you can run a full development service inside Docker. Therefore, I provide the [docker-compose](docker-compose.yml) and [Dockerfile.dev](Dockerfile.dev).
+When you don't want to install/configure Node.js locally, you can run a full development service inside Docker. Therefore, we provide the [docker-compose](docker-compose.yml) and [Dockerfile.dev](Dockerfile.dev).
 
 All you need is a docker compose environment. See [here](https://docs.docker.com/compose/install/).
 
@@ -52,7 +120,12 @@ All you need is a docker compose environment. See [here](https://docs.docker.com
 
 Docker-compose will build and start a new dev-instance, were the local [src](./src) folder will be mapped. So you can develop without a local node environment.
 
-As separate service, a test-instance will run, which will watch the tests inside [test](./test) and run them automatically on any changes.
+As separate service, a test-instance will run, which will watch the tests inside [test](./test) and run them automatically on any changes, therefore you find a separate compose file [docker-compose.override.yml](docker-compose.override.yml) in the project. Because of the name (`.override`), it will automatically attached when you simple run `docker-compose up`.
+
+When you want to run the development instance without the test-service, you can run:
+```console
+docker-compose -f docker-compose.yml up
+```
 
 #### Downsides
 Because only `src/` will be mapped into the container, you need to re-run the service every time you need to make some changes in the [package.json](package.json) (e.g. add additional packages).
@@ -61,7 +134,7 @@ Because only `src/` will be mapped into the container, you need to re-run the se
 
 
 ## Prerequisites
-When developing locally, you need [Node.js](https://nodejs.org/en/), I recommend the current (02.2021) [LTS 14.x](https://nodejs.org/dist/latest-v14.x/).
+When developing locally, you need [Node.js](https://nodejs.org/en/), we recommend the current (02.2021) [LTS 14.x](https://nodejs.org/dist/latest-v14.x/).
 
 A useful tool to manage different versions of Node.js locally would be [NVM](https://github.com/nvm-sh/nvm).
 
@@ -81,7 +154,7 @@ To build the project, run `npm run build` or take a look into the [Docker](#dock
 
 ## Testing
 
-I'm using [Jest](https://jestjs.io/) for testing, you can find some example tests inside of [test](./test). With the help of [supertest](https://www.npmjs.com/package/supertest) we also can do some [End2End-Testing](./test/e2e) without the need of a separate running node-server.
+We're using [Jest](https://jestjs.io/) for testing, you can find some example tests inside of [test](./test). With the help of [supertest](https://www.npmjs.com/package/supertest) we also can do some [End2End-Testing](./test/e2e) without the need of a separate running node-server.
 
 Run tests locally
 ```console
@@ -99,3 +172,12 @@ npm run test:coverage
 ```
 
 When you use [docker-compose](#docker-dev) you will also have a separate service running the tests in watch mode.
+
+## Useful links
+* [root-less Docker](https://docs.docker.com/engine/security/rootless/)
+* [Docker Compose](https://docs.docker.com/compose/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Node.js](https://nodejs.org/en/)
+* [Express](https://expressjs.com/)
+* [Jest](https://jestjs.io/)
+* 

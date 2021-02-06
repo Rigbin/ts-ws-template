@@ -10,15 +10,7 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
+    environment:
+      - NODE_ENV=development
     volumes:
       - ./src:/usr/src/app/src
-  tests:
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-    image: ts-service-test
-    container_name: ts-service-test
-    restart: unless-stopped
-    volumes:
-      - ./src:/usr/src/app/src
-      - ./test:/usr/src/app/test
