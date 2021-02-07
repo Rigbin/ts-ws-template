@@ -1,11 +1,11 @@
 # TypeScript Template
 
-TypeScript WebService/MicroService template for build automation
+TypeScript WebService/MicroService template for build automation.
 
-created for educational purpose. [FH JOANNEUM IMS](https://www.fh-joanneum.at/ims/), by [Harald Schwab](mailto:harald.schwab@edu.fh-joanneum.at).  
-**IMS19** *WS20* **Secure Service Oriented Architectures** by [Egon Teiniker](mailto:egon.teiniker@fh-joanneum.at).
+created for educational purpose. [FH JOANNEUM IMS](https://www.fh-joanneum.at/ims/), by [Harald Schwab](https://github.com/Rigbin).  
+For **IMS19** *WS20* lecture **Secure Service Oriented Architectures** by [Egon Teiniker](https://github.com/teiniker).
 
-You can find the repository on [git-iit](https://git-iit.fh-joanneum.at/ims_exercises/typescript-template).
+You can find the repository on [GitHub](https://github.com/Rigbin/ts-ws-template).
 
 ## About
 Here you can find a base template to create web/micro services with [Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/), using [TypeScript](https://www.typescriptlang.org/).
@@ -140,7 +140,7 @@ A useful tool to manage different versions of Node.js locally would be [NVM](htt
 
 Clone this repository and install node packages using `npm`.
 ```console
-git clone https://git-iit.fh-joanneum.at/ims_exercises/typescript-template.git ts-service
+git clone https://github.com/Rigbin/ts-ws-template ts-service
 cd ts-service
 npm ci --silent
 ```
@@ -180,4 +180,3 @@ When you use [docker-compose](#docker-dev) you will also have a separate service
 * [Node.js](https://nodejs.org/en/)
 * [Express](https://expressjs.com/)
 * [Jest](https://jestjs.io/)
-* 

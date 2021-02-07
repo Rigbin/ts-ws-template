@@ -2,11 +2,11 @@
   "name": "typescript-template",
   "version": "0.1.0",
   "description": "TypeScript build automation template",
-  "author": "Harald Schwab, IMS - FH JOANNEUM <harald.schwab@edu.fh-joanneum.at>",
+  "author": "Harald Schwab",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://git-iit.fh-joanneum.at/ims_exercises/typescript-template"
+    "url": "https://github.com/Rigbin/ts-ws-template"
   },
   "main": "dist/server.js",
   "scripts": {
