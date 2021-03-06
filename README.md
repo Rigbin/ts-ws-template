@@ -14,7 +14,7 @@ You can run it locally, as long as you have installed Node.js, or using Docker (
 
 This project provides a [Dockerfile](Dockerfile) to create a container running the service. This Dockerfile is [multi-staged](https://docs.docker.com/develop/develop-images/multistage-build/), to first build/transpile TypeScript to JavaScript. Find more information in the [Docker](#docker) section.
 
-The template has [logging](src/util/logger/logger.ts), an example [middleware](src/app/middleware/logging/logging.ts) and a basic [routing](src/app/router.ts) included, as well as a basic [configuration](src/config/environment.ts) using [dotenv](https://www.npmjs.com/package/dotenv) and uses [cors](https://www.npmjs.com/package/cors).
+The template has [logging](src/util/logger/logger.ts), an example [middleware](src/app/middleware/logging/logging.ts) and a basic [routing](src/app/router.ts) included, as well as a basic [configuration](src/config/environment.ts) using [dotenv](https://www.npmjs.com/package/dotenv) and uses [cors](https://www.npmjs.com/package/cors). Additionally, it is extended with MongoDB for persistency, see [mongodb](#mongodb).
 
 
 ### Docker
@@ -132,6 +132,19 @@ Because only `src/` will be mapped into the container, you need to re-run the se
 
 > When making some changes you should also run `docker-compose build` before up, to re-build the container image! Or you start the service with `docker-compose up --build`!
 
+## MongoDB
+To provide a persistency layer, MongoDB is added to this template. We use [mongoose]() as driver and a [model](src/app/model)/[controller](src/app/controller) structure. A mongo instance will be provided when you start docker-compose [development](docker-compose.yml) or [production](docker-compose.prod.yml).
+
+**Development**
+```console
+docker-compose -f docker-compose.yml up 
+```
+> when you do some changes in the compose.yml, you should start the first time with the options `--build --force-recreat --renew-anon-volumes`.
+
+**Production**
+```console
+docker-compose -f docker-compose.prod.yml up 
+```
 
 ## Prerequisites
 When developing locally, you need [Node.js](https://nodejs.org/en/), we recommend the current (02.2021) [LTS 14.x](https://nodejs.org/dist/latest-v14.x/).
