@@ -40,3 +40,6 @@ dist/**/*
 
 # ignore yarn.lock
 yarn.lock
+
+# mongodb local db
+mongodb_data_container/*
