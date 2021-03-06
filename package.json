@@ -26,6 +26,8 @@
     "@root": ".",
     "@app": "dist/app",
     "@config": "dist/config",
+    "@controller": "dist/app/controller",
+    "@model": "dist/app/model",
     "@util": "dist/util",
     "@pack": "package.json"
   },
@@ -39,13 +41,16 @@
     "build",
     "ci",
     "cd",
-    "docker"
+    "docker",
+    "rest",
+    "mongodb"
   ],
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "module-alias": "^2.2.2",
+    "mongoose": "^5.11.18",
     "typescript-logging": "^1.0.0"
   },
   "devDependencies": {
